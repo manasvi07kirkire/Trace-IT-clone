@@ -23,17 +23,17 @@ interface StatCardProps {
 
 function StatCard({ title, value, change, icon, trend }: StatCardProps) {
   return (
-    <Card>
+    <Card className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm border-gray-700 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="h-4 w-4 text-muted-foreground">{icon}</div>
+        <CardTitle className="text-sm font-medium text-gray-300">{title}</CardTitle>
+        <div className="h-4 w-4 text-cyan-400">{icon}</div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">{value}</div>
         <p className={`text-xs ${
-          trend === "up" ? "text-green-600" : 
-          trend === "down" ? "text-red-600" : 
-          "text-gray-600"
+          trend === "up" ? "text-green-400" : 
+          trend === "down" ? "text-red-400" : 
+          "text-gray-400"
         }`}>
           {change} from last month
         </p>
@@ -55,8 +55,8 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Welcome to the TraceIT admin panel</p>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Dashboard</h1>
+        <p className="text-gray-400">Welcome to the TraceIT admin panel</p>
       </div>
 
       {/* Stats Grid */}
@@ -107,9 +107,9 @@ export default function Dashboard() {
 
       {/* Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm border-gray-700">
           <CardHeader>
-            <CardTitle>Recent Inquiries</CardTitle>
+            <CardTitle className="text-white">Recent Inquiries</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -118,10 +118,10 @@ export default function Dashboard() {
                 { name: "Jane Smith", email: "jane@example.com", time: "4 hours ago" },
                 { name: "Bob Johnson", email: "bob@example.com", time: "6 hours ago" },
               ].map((inquiry, index) => (
-                <div key={index} className="flex items-center justify-between">
+                <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-gray-800/50 transition-colors">
                   <div>
-                    <p className="font-medium">{inquiry.name}</p>
-                    <p className="text-sm text-gray-600">{inquiry.email}</p>
+                    <p className="font-medium text-white">{inquiry.name}</p>
+                    <p className="text-sm text-gray-400">{inquiry.email}</p>
                   </div>
                   <p className="text-sm text-gray-500">{inquiry.time}</p>
                 </div>
@@ -130,22 +130,22 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm border-gray-700">
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle className="text-white">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
-                { action: "New testimonial added", time: "1 hour ago", icon: <Heart className="h-4 w-4" /> },
-                { action: "Blog post published", time: "3 hours ago", icon: <FileText className="h-4 w-4" /> },
-                { action: "Pricing updated", time: "5 hours ago", icon: <DollarSign className="h-4 w-4" /> },
-                { action: "New user registered", time: "8 hours ago", icon: <Users className="h-4 w-4" /> },
+                { action: "New testimonial added", time: "1 hour ago", icon: <Heart className="h-4 w-4 text-cyan-400" /> },
+                { action: "Blog post published", time: "3 hours ago", icon: <FileText className="h-4 w-4 text-purple-400" /> },
+                { action: "Pricing updated", time: "5 hours ago", icon: <DollarSign className="h-4 w-4 text-green-400" /> },
+                { action: "New user registered", time: "8 hours ago", icon: <Users className="h-4 w-4 text-yellow-400" /> },
               ].map((activity, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <div className="text-gray-400">{activity.icon}</div>
+                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-800/30 hover:bg-gray-800/50 transition-colors">
+                  <div className="">{activity.icon}</div>
                   <div className="flex-1">
-                    <p className="text-sm">{activity.action}</p>
+                    <p className="text-sm text-gray-300">{activity.action}</p>
                     <p className="text-xs text-gray-500">{activity.time}</p>
                   </div>
                 </div>

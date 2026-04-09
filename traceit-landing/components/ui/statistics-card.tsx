@@ -51,28 +51,42 @@ interface StatisticsCardProps {
 const StatisticsCard = ({ className }: StatisticsCardProps) => {
   const [stats, setStats] = useState<any[]>([]);
 
+  const transformStats = (storedMetrics: any[]) => {
+    return storedMetrics.map((metric: any, index: number) => {
+      // Extract numeric value from the metric value (e.g., "1,234" -> 1234, "89%" -> 89)
+      let value = parseInt(metric.value.replace(/[^0-9]/g, ''));
+      
+      // If the value is a percentage, use it directly, otherwise scale it to a reasonable percentage
+      if (metric.value.includes('%')) {
+        value = parseInt(metric.value.replace('%', ''));
+      } else {
+        // Scale large numbers to a percentage (e.g., 1234 -> 85%)
+        value = Math.min(95, Math.max(15, (value / 100) % 100));
+      }
+      
+      const colors = [
+        "from-cyan-400 to-cyan-600",
+        "from-purple-400 to-purple-600", 
+        "from-green-400 to-green-600",
+        "from-blue-400 to-blue-600"
+      ];
+      
+      return {
+        value: value,
+        label: metric.title,
+        color: colors[index % colors.length],
+        delay: 0.2 * (index + 1),
+      };
+    });
+  };
+
   useEffect(() => {
-    // Load stats from localStorage
-    const storedStats = JSON.parse(localStorage.getItem('traceit_community_stats') || '[]');
+    // Load metrics from localStorage
+    const storedMetrics = JSON.parse(localStorage.getItem('traceit_community_metrics') || '[]');
     
-    if (storedStats.length > 0) {
+    if (storedMetrics.length > 0) {
       // Transform admin data to component format
-      const transformedStats = storedStats.map((stat: any, index: number) => {
-        const value = parseInt(stat.value.replace('%', ''));
-        const colors = [
-          "from-cyan-400 to-cyan-600",
-          "from-purple-400 to-purple-600", 
-          "from-green-400 to-green-600",
-          "from-blue-400 to-blue-600"
-        ];
-        
-        return {
-          value: value,
-          label: stat.label,
-          color: colors[index % colors.length],
-          delay: 0.2 * (index + 1),
-        };
-      });
+      const transformedStats = transformStats(storedMetrics);
       setTimeout(() => {
         setStats(transformedStats);
       }, 0);
@@ -92,25 +106,10 @@ const StatisticsCard = ({ className }: StatisticsCardProps) => {
   // Listen for storage events for real-time updates
   useEffect(() => {
     const handleStorageChange = (e: any) => {
-      if (e.key === 'traceit_community_stats') {
-        const storedStats = JSON.parse(e.newValue || '[]');
-        if (storedStats.length > 0) {
-          const transformedStats = storedStats.map((stat: any, index: number) => {
-            const value = parseInt(stat.value.replace('%', ''));
-            const colors = [
-              "from-cyan-400 to-cyan-600",
-              "from-purple-400 to-purple-600", 
-              "from-green-400 to-green-600",
-              "from-blue-400 to-blue-600"
-            ];
-            
-            return {
-              value: value,
-              label: stat.label,
-              color: colors[index % colors.length],
-              delay: 0.2 * (index + 1),
-            };
-          });
+      if (e.key === 'traceit_community_metrics') {
+        const storedMetrics = JSON.parse(e.newValue || '[]');
+        if (storedMetrics.length > 0) {
+          const transformedStats = transformStats(storedMetrics);
           setStats(transformedStats);
         }
       }
