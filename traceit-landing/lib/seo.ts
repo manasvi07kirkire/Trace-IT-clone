@@ -191,7 +191,7 @@ export const updatePageTitle = (title: string) => {
     document.title = title;
     
     // Update Open Graph title
-    let ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) {
       ogTitle.setAttribute('content', title);
     } else {

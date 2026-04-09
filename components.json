@@ -5,9 +5,9 @@
   "tsx": true,
   "iconLibrary": "lucide-react",
   "tailwind": {
-    "config": "tailwind.config.ts",
+    "config": "tailwind.config.js",
     "css": "app/globals.css",
-    "baseColor": 950,
+    "baseColor": "slate",
     "cssVariables": true,
     "prefix": ""
   },

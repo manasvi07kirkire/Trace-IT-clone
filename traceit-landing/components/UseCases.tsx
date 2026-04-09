@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { BookOpen, Users, Shield, Zap } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const useCases = [
   {

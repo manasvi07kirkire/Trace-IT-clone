@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Search } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +31,10 @@ const Navbar = () => {
       }
     };
 
+    // Check authentication status
+    const authStatus = localStorage.getItem('traceit_admin_auth') === 'true';
+    setIsAuthenticated(authStatus);
+
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initial state
 
@@ -42,6 +47,14 @@ const Navbar = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsOpen(false);
+  };
+
+  const handleAdminClick = () => {
+    if (isAuthenticated) {
+      window.location.href = '/admin';
+    } else {
+      window.location.href = '/admin/login';
+    }
   };
 
   const navLinks = [
@@ -85,6 +98,15 @@ const Navbar = () => {
                 {link.label}
               </button>
             ))}
+            
+            {/* Admin Button */}
+            <button
+              onClick={handleAdminClick}
+              className="flex items-center space-x-2 px-3 py-2 text-white/60 hover:text-white transition-colors duration-200 font-medium border border-white/20 rounded-lg"
+            >
+              <Lock className="w-4 h-4" />
+              <span>Admin</span>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -124,6 +146,15 @@ const Navbar = () => {
               <div className="pt-4 space-y-3 border-t border-white/10">
                 <button className="w-full px-4 py-2 text-white/80 hover:text-white transition-colors duration-200 font-medium flex items-center justify-center">
                   Contact
+                </button>
+                
+                {/* Admin Button - Mobile */}
+                <button
+                  onClick={handleAdminClick}
+                  className="w-full px-4 py-2 text-white/60 hover:text-white transition-colors duration-200 font-medium flex items-center justify-center border border-white/20 rounded-lg"
+                >
+                  <Lock className="w-4 h-4 mr-2" />
+                  Admin
                 </button>
               </div>
             </div>

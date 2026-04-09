@@ -1,55 +1,107 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Star, ArrowRight, Building2, Users, Shield, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Pricing = () => {
-  const plans = [
-    {
-      id: 'free',
-      name: 'Free Plan',
-      target: 'For basic users',
-      price: 'Free',
-      features: [
-        { icon: 'search', text: 'Report lost items' },
-        { icon: 'upload', text: 'Submit found items' },
-        { icon: 'link', text: 'Basic item matching' },
-        { icon: 'users', text: 'Community support' },
-      ],
-      highlighted: false,
-      cta: 'Get Started',
-    },
-    {
-      id: 'pro',
-      name: 'Pro Plan',
-      target: 'For frequent users',
-      price: '$9.99/mo',
-      features: [
-        { icon: 'search', text: 'Priority matching' },
-        { icon: 'bell', text: 'Instant notifications' },
-        { icon: 'image', text: 'Upload multiple item images' },
-        { icon: 'zap', text: 'Faster claim verification' },
-      ],
-      highlighted: true,
-      cta: 'Choose Plan',
-    },
-    {
-      id: 'organization',
-      name: 'Organization Plan',
-      target: 'For campuses, companies, and institutions',
-      price: 'Custom',
-      features: [
-        { icon: 'layout-dashboard', text: 'Dedicated lost & found dashboard' },
-        { icon: 'package', text: 'Bulk item management' },
-        { icon: 'bar-chart', text: 'Analytics for reported items' },
-        { icon: 'shield', text: 'Admin management tools' },
-      ],
-      highlighted: false,
-      cta: 'Contact Sales',
-    },
-  ];
+  const [plans, setPlans] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Load pricing plans from localStorage
+    const storedPlans = JSON.parse(localStorage.getItem('traceit_pricing_plans') || '[]');
+    
+    if (storedPlans.length > 0) {
+      // Transform admin data to component format
+      const transformedPlans = storedPlans.map((plan: any) => ({
+        id: `plan-${plan.id}`,
+        name: plan.name,
+        target: plan.subtitle,
+        price: plan.billing ? `${plan.price}${plan.billing}` : plan.price,
+        features: plan.features.map((feature: any) => ({
+          icon: 'check',
+          text: feature
+        })),
+        highlighted: plan.popular,
+        cta: plan.cta,
+      }));
+      setPlans(transformedPlans);
+    } else {
+      // Fallback to hardcoded values
+      setPlans([
+        {
+          id: 'free',
+          name: 'Free Plan',
+          target: 'For basic users',
+          price: 'Free',
+          features: [
+            { icon: 'search', text: 'Report lost items' },
+            { icon: 'upload', text: 'Submit found items' },
+            { icon: 'link', text: 'Basic item matching' },
+            { icon: 'users', text: 'Community support' },
+          ],
+          highlighted: false,
+          cta: 'Get Started',
+        },
+        {
+          id: 'pro',
+          name: 'Pro Plan',
+          target: 'For frequent users',
+          price: '$9.99/mo',
+          features: [
+            { icon: 'search', text: 'Priority matching' },
+            { icon: 'bell', text: 'Instant notifications' },
+            { icon: 'image', text: 'Upload multiple item images' },
+            { icon: 'zap', text: 'Faster claim verification' },
+          ],
+          highlighted: true,
+          cta: 'Choose Plan',
+        },
+        {
+          id: 'organization',
+          name: 'Organization Plan',
+          target: 'For campuses, companies, and institutions',
+          price: 'Custom',
+          features: [
+            { icon: 'layout-dashboard', text: 'Dedicated lost & found dashboard' },
+            { icon: 'package', text: 'Bulk item management' },
+            { icon: 'bar-chart', text: 'Analytics for reported items' },
+            { icon: 'shield', text: 'Admin management tools' },
+          ],
+          highlighted: false,
+          cta: 'Contact Sales',
+        },
+      ]);
+    }
+  }, []);
+
+  // Listen for storage events for real-time updates
+  useEffect(() => {
+    const handleStorageChange = (e: any) => {
+      if (e.key === 'traceit_pricing_plans') {
+        const storedPlans = JSON.parse(e.newValue || '[]');
+        if (storedPlans.length > 0) {
+          const transformedPlans = storedPlans.map((plan: any) => ({
+            id: `plan-${plan.id}`,
+            name: plan.name,
+            target: plan.subtitle,
+            price: plan.billing ? `${plan.price}${plan.billing}` : plan.price,
+            features: plan.features.map((feature: any) => ({
+              icon: 'check',
+              text: feature
+            })),
+            highlighted: plan.popular,
+            cta: plan.cta,
+          }));
+          setPlans(transformedPlans);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const getIcon = (iconName: string) => {
     const iconMap: { [key: string]: React.ReactNode } = {
@@ -89,7 +141,7 @@ const Pricing = () => {
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {plans.map((plan, index) => (
+          {plans.map((plan: any, index: number) => (
             <motion.div
               key={plan.id}
               initial={{ opacity: 0, y: 50 }}
@@ -123,7 +175,7 @@ const Pricing = () => {
 
               {/* Features List */}
               <div className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
+                {plan.features.map((feature: any, featureIndex: number) => (
                   <motion.div
                     key={featureIndex}
                     initial={{ opacity: 0, x: -20 }}

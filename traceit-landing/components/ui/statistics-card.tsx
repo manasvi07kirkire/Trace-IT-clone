@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 
 interface StatsBarProps {
   value: number;
@@ -48,12 +49,76 @@ interface StatisticsCardProps {
 }
 
 const StatisticsCard = ({ className }: StatisticsCardProps) => {
-  const stats = [
-    { value: 85, label: "Items Recovered", color: "from-cyan-400 to-cyan-600", delay: 0.2 },
-    { value: 92, label: "Active Users", color: "from-purple-400 to-purple-600", delay: 0.4 },
-    { value: 78, label: "Success Rate", color: "from-green-400 to-green-600", delay: 0.6 },
-    { value: 95, label: "User Satisfaction", color: "from-blue-400 to-blue-600", delay: 0.8 },
-  ];
+  const [stats, setStats] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Load stats from localStorage
+    const storedStats = JSON.parse(localStorage.getItem('traceit_community_stats') || '[]');
+    
+    if (storedStats.length > 0) {
+      // Transform admin data to component format
+      const transformedStats = storedStats.map((stat: any, index: number) => {
+        const value = parseInt(stat.value.replace('%', ''));
+        const colors = [
+          "from-cyan-400 to-cyan-600",
+          "from-purple-400 to-purple-600", 
+          "from-green-400 to-green-600",
+          "from-blue-400 to-blue-600"
+        ];
+        
+        return {
+          value: value,
+          label: stat.label,
+          color: colors[index % colors.length],
+          delay: 0.2 * (index + 1),
+        };
+      });
+      setTimeout(() => {
+        setStats(transformedStats);
+      }, 0);
+    } else {
+      // Fallback to hardcoded values
+      setTimeout(() => {
+        setStats([
+          { value: 85, label: "Items Recovered", color: "from-cyan-400 to-cyan-600", delay: 0.2 },
+          { value: 92, label: "Active Users", color: "from-purple-400 to-purple-600", delay: 0.4 },
+          { value: 78, label: "Success Rate", color: "from-green-400 to-green-600", delay: 0.6 },
+          { value: 95, label: "User Satisfaction", color: "from-blue-400 to-blue-600", delay: 0.8 },
+        ]);
+      }, 0);
+    }
+  }, []);
+
+  // Listen for storage events for real-time updates
+  useEffect(() => {
+    const handleStorageChange = (e: any) => {
+      if (e.key === 'traceit_community_stats') {
+        const storedStats = JSON.parse(e.newValue || '[]');
+        if (storedStats.length > 0) {
+          const transformedStats = storedStats.map((stat: any, index: number) => {
+            const value = parseInt(stat.value.replace('%', ''));
+            const colors = [
+              "from-cyan-400 to-cyan-600",
+              "from-purple-400 to-purple-600", 
+              "from-green-400 to-green-600",
+              "from-blue-400 to-blue-600"
+            ];
+            
+            return {
+              value: value,
+              label: stat.label,
+              color: colors[index % colors.length],
+              delay: 0.2 * (index + 1),
+            };
+          });
+          setStats(transformedStats);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <section className={cn("py-20", className)}>

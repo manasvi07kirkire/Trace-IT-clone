@@ -2,24 +2,23 @@
 
 import { motion } from "framer-motion";
 import { Search, AlertCircle, Users, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const problems = [
   {
     title: "Lost Your Phone?",
-    description: "It happens to everyone. You're in the library, your phone slips out of your pocket, and suddenly it's gone.",
+    description: "It happens to everyone. You&apos;re in the library, your phone slips out of your pocket, and suddenly it&apos;s gone.",
     icon: <Search className="w-8 h-8 text-cyan-400" />,
     delay: 0.1
   },
   {
     title: "Missing Keys?",
-    description: "You're rushing to class, reach for your keys, and they're not there. Panic starts to set in.",
+    description: "You&apos;re rushing to class, Reach for your keys, and they&apos;re not there. Panic starts to set in.",
     icon: <AlertCircle className="w-8 h-8 text-purple-400" />,
     delay: 0.2
   },
   {
     title: "Wallet Disappeared?",
-    description: "You had it at lunch, but now it's nowhere to be found. Important cards and cash inside.",
+    description: "You had it at lunch, but now it&apos;s nowhere to be found. Important cards and cash inside.",
     icon: <Users className="w-8 h-8 text-cyan-400" />,
     delay: 0.3
   }

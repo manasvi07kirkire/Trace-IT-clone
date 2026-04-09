@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --admin-background: #f9fafb;
+  --admin-foreground: #111827;
+  --admin-sidebar: #000000;
+  --admin-sidebar-text: #d1d5db;
+  --admin-sidebar-hover: #1f2937;
+  --admin-primary: #000000;
+  --admin-primary-foreground: #ffffff;
 }
 
 @theme inline {
@@ -23,4 +30,15 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Admin-specific styles */
+.admin-layout {
+  --admin-bg: var(--admin-background);
+  --admin-fg: var(--admin-foreground);
+  --admin-sidebar-bg: var(--admin-sidebar);
+  --admin-sidebar-text: var(--admin-sidebar-text);
+  --admin-sidebar-hover: var(--admin-sidebar-hover);
+  --admin-primary: var(--admin-primary);
+  --admin-primary-fg: var(--admin-primary-foreground);
 }
