@@ -328,7 +328,6 @@ const CommunityImpactManager = () => {
             </div>
           </div>
         </div>
-      </div>
     )}
   </div>
   );

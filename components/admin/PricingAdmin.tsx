@@ -68,9 +68,7 @@ export default function PricingAdmin() {
 
   // Save to localStorage whenever plans change
   useEffect(() => {
-    if (plans.length > 0) {
-      localStorage.setItem('traceit_pricing_plans', JSON.stringify(plans));
-    }
+    localStorage.setItem('traceit_pricing_plans', JSON.stringify(plans));
   }, [plans]);
 
   const [editingPlan, setEditingPlan] = useState<PricingPlan | null>(null);
